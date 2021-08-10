@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sample Registration Form</title>
+    <link rel="stylesheet" type="text/css" href="./utils/style.css">
+    <script src="./utils/apiCall.js"></script>
+    <style>
+    body {font-family: Arial, Helvetica, sans-serif;}
+    </style>
+</head>
+<body>
+    <div class="add">
+        <table align="center">
+            <tr>
+                <th colspan="2" align="center">
+                     Sample Registration Form
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    <label for="">First Name:</label>
+                </td>
+                <td>
+                    <input type="text" name="fname" id="fname" onclick="validation(this.id)" onchange="validation(this.id)">
+                    <span id="fnameError"> </span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="">Last Name:</label>
+                </td>
+                <td>
+                    <input type="text" name="lname" id="lname" onclick="validation(this.id)" onchange="validation(this.id)">
+                    <span id="lnameError"></span>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="">Middle Name:</label></td>
+                <td>
+                    <input type="text" name="mname" id="mname">
+                    <span id="mnameError"></span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="">Address:</label>
+                </td>
+                <td>
+                    <textarea name="address" id="address" cols="30" rows="2" onclick="validation(this.id)" onchange="validation(this.id)"></textarea>
+                    <span id="addressError"></span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="">Country:</label>
+                </td>
+                <td>
+                        <select name="country" id="country" onchange="loadState(this.id)">
+                            <option value="">Select Contry</option>
+                        </select>
+                        <span id="countryError"></span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="">State:</label>
+                </td>
+                <td>
+                    <select name="state" id="state" onchange=""  >
+                        <option value="">Select State</option>
+                    </select>
+                    <span id="stateError"></span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="">Zip Code:</label>
+                </td>
+                <td>
+                    <input type="text" name="zipcode" id="zipcode" onclick="validation(this.id)" onchange="validation(this.id)">
+                    <span id="zipcodeError"></span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="">Email:</label>
+                </td>
+                <td>
+                    <input type="text" name="email" id="email" onclick="validation(this.id)" onchange="validation(this.id)">
+                    <span id="emailError"></span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="">Phone Number:</label>
+                </td>
+                <td>
+                    <select name="contryCode" id="contryCode" style="width: 60px;">
+                        <option value="+1">+1</option>
+                    </select>
+                    <input type="text" name="phoneNumber" id="phoneNumber" onclick="validation(this.id)" onchange="validation(this.id)" style="width: 150px;" onkeypress='validate(event)'>
+                    <span id="phoneNumberError"></span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="">Height (Ft/inches):</label>
+                </td>
+                <td>
+                    <input type="text" name="height" id="height" onclick="validation(this.id)" onchange="validation(this.id)" style="width: 50px;" onkeypress='validate(event)'>
+                    <select name="heightType" id="heightType" style="width: 75px;">
+                        <option value="feet">Feed</option>
+                        <option value="inches">Inches</option>
+                    </select>
+                    <span id="heightError"></span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="">Weight (kgs):</label>
+                </td>
+                <td>
+                    <input type="text" name="weight" id="weight" onclick="validation(this.id)" onchange="validation(this.id)" onkeypress='validate(event)'>
+                    <span id="weightError"></span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="">Password:</label> 
+                </td>
+                <td>
+                    <input type="password" id="pass" name="pass" onclick="validation(this.id)" onchange="validation(this.id)" required>
+                    <span id="passError"></span>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" align="center">
+                    <input type="button" value="Save" name="save" id="save" onclick="addUserDetails()">
+                    <input type="button" value="Login" onclick="goLoginPage()" style="margin-left: 20px;">
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" align="center">
+                    <p id="demo"></p>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+     <!-- The Modal -->
+     <div id="myModal" class="modal">
+
+        <!-- Modal content -->
+        <div class="modal-content">
+                <div class="model-heading" >confirmation</div>
+                <div class="fields">
+                    <label for="">First Name:</label>
+                    <span class="value" id="modelFname"></span>
+                    
+                </div>  
+                <div class="fields">
+                    <label for="">Last Name:</label>
+                    <span class="value" id="modelLname"></span>
+                </div>
+                <div class="fields">
+                    <label for="">Middle Name:</label>
+                    <span class="value" id="modelMname"></span>
+                </div>
+                <div class="fields">
+                    <label for="" >Address:</label>
+                    <label class="value" id="modelAddress"></label>
+                </div>
+                <div class="fields">
+                    <table  style="width: 100%;">
+                        <tr>
+                            <td>
+                                <label for="">Email:</label>
+                                <span class="value" id="modelEmail" ></span>
+                            </td>
+                            <td>
+                                <label for="" >Phone Number:</label>
+                                <span class="value" id="modelPnumber"></span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="fields">
+                    <table style="width: 100%;">
+                        <tr>
+                            <td>
+                                <label for="">Height:</label>
+                                <span class="value" id="modelHeight"></span>
+                            </td>
+                            <td>
+                                <label for="">Weight:</label>
+                                <span class="value" id="modelWeight"></span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="fields" align="right">
+                    <input type="button" value="Cancel" onclick="closeModel()">
+                    <input type="button" value="ok" onclick="saveUser()" style="margin-right: 0px;">
+                </div>              
+        </div>
+    
+    </div>
+
+    <div id="dialogMsg" class="modal">
+
+        <div class="modal-content">
+            <p id="apiMessage" align="center"></p>
+            <div class="fields" align="right">
+                <input type="button" value="Cancel" id="dialogMsgCancel" onclick="closeModel()">
+                <input type="button" value="Close" id="dialogMsgClose" onclick="clearData()">
+            </div>
+        </div>
+    
+    </div>
+</body>
+<script>
+    loadCountryList()
+    loadCountryCode()
+    var comData = {}
+    var modal = document.getElementById("myModal");
+    var msgModal = document.getElementById("dialogMsg");
+
+    function showDialog(data) {
+        modal.style.display = "block";
+        document.getElementById("modelFname").innerHTML = data.fname
+        document.getElementById("modelLname").innerHTML = data.lname
+        document.getElementById("modelMname").innerHTML = data.mname
+        document.getElementById("modelAddress").innerHTML = `${data.address}<br/>${data.country}<br/>${data.state}<br/>${data.zipcode}`
+        document.getElementById("modelEmail").innerHTML = data.email
+        document.getElementById("modelPnumber").innerHTML = `${data.contryCode}-${data.phoneNumber}`
+        document.getElementById("modelHeight").innerHTML = data.height
+        document.getElementById("modelWeight").innerHTML = data.weight
+        comData = data
+    }
+
+    function showMsgDialog() {
+        msgModal.style.display = "block";
+    }
+
+    function closeModel() {
+        modal.style.display = "none";
+        msgModal.style.display = "none";
+    }
+
+    function validation(id) {
+        var value = document.getElementById(id).value 
+        if(value == '' ) {
+            validationError(id)
+        } else {
+            if(id == 'email') {
+                ValidateEmail(id) 
+            } else {
+                validationFine(id)
+            }
+        }
+    }
+
+    function validationError(id) {
+        var errorId = `${id}Error`
+        document.getElementById(id).style.border = `2px solid red`
+        document.getElementById(errorId).style.color = 'red'
+        document.getElementById(errorId).innerHTML = '&times;'
+    }
+
+    function validationFine(id) {
+        var errorId = `${id}Error`
+        document.getElementById(id).style.border = `2px solid green`
+        document.getElementById(errorId).innerHTML = ''
+    }
+
+    function ValidateEmail(id) {
+        var value = document.getElementById(id).value
+        if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(value))
+        {
+            validationFine(id)
+        
+        }else {
+            validationError(id)    
+        }
+    }
+    
+    function ValidateEmailCheck(id) {
+        var value = document.getElementById(id).value
+        if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(value))
+        {
+            validationFine(id)
+            return false
+        }else {
+            validationError(id)  
+            return true  
+        }
+    }
+
+    function clearData() {
+        document.getElementById("fname").value = ''
+        document.getElementById("lname").value = ''
+        document.getElementById("mname").value = ''
+        document.getElementById("address").value = ''
+        document.getElementById("country").value = ''
+        document.getElementById("state").value = ''
+        document.getElementById("zipcode").value = ''
+        document.getElementById("email").value = ''
+        document.getElementById("phoneNumber").value = '' 
+        document.getElementById("email").value = ''
+        document.getElementById("height").value = ''
+        document.getElementById("weight").value = ''
+        document.getElementById("pass").value  = ''
+        closeModel()
+    }
+
+    function addUserDetails() {
+        var validationArray = ["fname","lname","mname","address","country","state","zipcode","email","phoneNumber","height","weight","pass"]
+        var fname = document.getElementById("fname").value 
+        var lname = document.getElementById("lname").value 
+        var mname = document.getElementById("mname").value 
+        var address = document.getElementById("address").value
+        var sel = document.getElementById("country"); 
+        var country = sel.options[sel.selectedIndex].text
+        var sta = document.getElementById("state"); 
+        var state = sta.options[sta.selectedIndex].text  
+        if(state == 'Not Available')
+            state = ''
+        var zipcode = document.getElementById("zipcode").value 
+        var email = document.getElementById("email").value 
+        var phoneNumber = document.getElementById("phoneNumber").value
+        var contryCode = document.getElementById("contryCode").value
+        var heightType = document.getElementById("heightType").value
+        var height = document.getElementById("height").value+' '+ heightType
+        var weight = document.getElementById("weight").value+' kgs'
+        var password = document.getElementById("pass").value 
+        var error = false
+        console.log(contryCode)
+        validationArray.map((item) => {
+            var value = document.getElementById(item).value
+            
+            if(value == '' && item != 'mname' ) {
+                validationError(item)
+                error = true
+            } else {
+                if(item == 'email') {
+                    error = ValidateEmailCheck(item) 
+                } else {
+                    validationFine(item)
+                }
+            }
+        })
+        var data = {
+            fname : fname, 
+            lname : lname,
+            mname : mname,
+            address : address,
+            country: country,
+            contryCode: contryCode,
+            state: state,
+            zipcode: zipcode,  
+            email: email, 
+            phoneNumber: phoneNumber, 
+            email: email, 
+            height: height, 
+            weight: weight,
+            password: password
+        }
+        if(!error) {
+            showDialog(data)     
+        }
+        // showDialog(data)
+       
+    }
+
+    function saveUser(){
+        var b1 = document.getElementById("dialogMsgCancel");
+        var b2 = document.getElementById("dialogMsgClose");
+    
+        
+        addNewUserDetail(comData, (result) => {
+            if(result.error){
+                b2.style.display = "none";
+                b1.style.display = "block";
+            } else {
+                b1.style.display = "none";
+                b2.style.display = "block";
+            }
+            document.getElementById("apiMessage").innerHTML = result.message
+            showMsgDialog()
+        })
+        closeModel()
+    }
+    
+    function loadCountryList() {
+        getCountryList((result) => {
+            if(result.data.length > 0 ){ 
+                var loadData = `<option value =''>Select Country</option>`
+                result.data.forEach(element => {
+                    loadData += `<option value = ${element.id}>${element.country}</option>`
+                });
+            }
+            document.getElementById("country").innerHTML = loadData
+        })
+    }
+
+    function loadCountryCode() {
+        getCountryCode((result) => {
+            console.log(result)
+            var loadData = ''
+            result.data.map((item) => {
+                loadData += `<option value = ${item.dial_code}>${item.dial_code}</option>`
+            })
+            document.getElementById("contryCode").innerHTML = loadData
+        })
+    }
+
+    function loadState(id) {
+        var country = document.getElementById(id).value 
+        validation(id)
+        getStateList(country, (result) => {
+            console.log(result)
+            if(result.data.length > 0 ){ 
+                var loadData = `<option value =''>Select Country</option>`
+                result.data.forEach(element => {
+                    loadData += `<option value = ${element.states}>${element.states}</option>`
+                });
+            } else {
+                var loadData = `<option value ='null'>Not Available</option>`
+            }
+            document.getElementById("state").innerHTML = loadData
+        })
+    }
+
+    function goLoginPage(){
+        window.location.href = "./loginPage.html";
+    }
+
+    function validate(evt) {
+        var theEvent = evt || window.event;
+        if (theEvent.type === 'paste') {
+            key = event.clipboardData.getData('text/plain');
+        } else {
+            var key = theEvent.keyCode || theEvent.which;
+            key = String.fromCharCode(key);
+        }
+        var regex = /[0-9]|\./;
+        if( !regex.test(key) ) {
+            theEvent.returnValue = false;
+            if(theEvent.preventDefault) theEvent.preventDefault();
+        }
+    }
+    
+    </script>
+    
+</html>

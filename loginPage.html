@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sample Registration Form</title>
+    <link rel="stylesheet" type="text/css" href="./utils/style.css">
+    <script src="./utils/apiCall.js"></script>
+    <style>
+    body {font-family: Arial, Helvetica, sans-serif;}
+      
+    .add{
+        width: 450px;
+    }
+
+    .add td{
+        width: 150px;
+    }
+
+    .modal-content1{
+        padding: 10px;
+        margin: auto;
+        width: 800px;
+        background-color:white;
+        background-color:rgba(186, 213, 255);
+        border:1px solid white;
+    }
+    
+    .modal-content1 input[type=button]
+    {
+        width:100px;
+        height:30px;
+        padding:1px;
+        color:white;
+        font-weight:bold;
+        border-radius:5px;
+        background-color:rgba(20, 185, 245);
+    }
+
+    .modal-content1 input[type=submit]:hover,.modal-content1 input[type=button]:hover{
+        background-color:rgba(183, 204, 237);
+        color:rgba(32, 78, 150);
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.76);
+    }
+
+    </style>
+</head>
+<body>
+    <div class="add" style="margin-top: 200px;">
+        <table align="center">
+            <tr>
+                <th colspan="2" align="center">
+                     Sample Login Form
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    <label for="">User Name:</label>
+                </td>
+                <td>
+                    <input type="text" name="user" id="user">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="">Password:</label>
+                </td>
+                <td>
+                    <input type="password" name="pass" id="pass">
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" align="center">
+                    <input type="button" value="Login" name="login" id="login" onclick="login()">
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div id="dialogMsg" class="modal">
+
+        <div class="modal-content">
+            <div id="apiMessage" align="center" style="padding: 5px;"></div>
+            <div class="fields" align="right">
+                <input type="button" value="Close" id="dialogMsgClose" onclick="closeModel()">
+            </div>
+        </div>
+    
+    </div>
+    <div id="myModal" class="modal">
+
+        <div class="modal-content1">
+            <div id="apiMessage1" align="center" style="padding: 5px;"></div>
+            <div class="fields" align="right">
+                <input type="button" value="Show Details" id="dialogMsgCancel" onclick="showUserDetails()">
+                <input type="button" value="Close" id="dialogMsgClose" onclick="closeModel()">
+            </div>
+        </div>
+    
+    </div>
+  
+</body>
+<script>
+    var modal = document.getElementById("myModal");
+    var msgModal = document.getElementById("dialogMsg");
+    var accessToken = ''
+    function closeModel() {
+        modal.style.display = "none";
+        msgModal.style.display = "none";
+        clearAll()
+    }
+
+    function clearAll(){
+        document.getElementById("user").value = ''
+        document.getElementById("pass").value = ''
+    }
+
+    function showMsgDialog() {
+        msgModal.style.display = "block";
+    }
+
+    function showSuccessDialog() {
+        modal.style.display = "block";
+    }
+
+    function login() {
+        var userName = document.getElementById("user").value 
+        var password = document.getElementById("pass").value 
+        var input = {
+            userName: userName,
+            password: password
+        }
+        userLogin(input, (result) => {
+            if(result.error) {
+                document.getElementById("apiMessage").innerHTML = `${result.message}`
+                showMsgDialog() 
+            } else {
+                accessToken = result.data.token
+                document.getElementById("apiMessage1").innerHTML = `${result.message}<div>your access token: ${result.data.token}</div>`
+                showSuccessDialog()
+            }
+           
+        })
+    }
+
+    function showUserDetails() {
+        window.location.href = `./userDetails.html?accessToken=${accessToken}`;
+    }
+</script>
+</html>

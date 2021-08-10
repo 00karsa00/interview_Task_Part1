@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sample Registration Form</title>
+    <link rel="stylesheet" type="text/css" href="./utils/style.css">
+    <script src="./utils/apiCall.js"></script>
+    <style>
+    body {font-family: Arial, Helvetica, sans-serif;}
+    </style>
+</head>
+<body>
+    <div class="add">
+        <table align="center">
+            <tr>
+                <th colspan="2" align="center">
+                     User Details
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    <label for="">First Name:</label>
+                </td>
+                <td>
+                    <input type="text" name="fname" id="fname" disabled>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="">Last Name:</label>
+                </td>
+                <td>
+                    <input type="text" name="lname" id="lname" disabled>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="">Middle Name:</label></td>
+                <td>
+                    <input type="text" name="mname" id="mname" disabled>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="">Address:</label>
+                </td>
+                <td>
+                    <textarea name="address" id="address" cols="30" rows="2" disabled></textarea>
+                </td>
+            </tr>
+            <tr>      <span id="addressError"></span>
+                <td>
+                    <label for="">Country:</label>
+                </td>
+                <td>
+                    <input type="text" name="country" id="country" disabled>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="">State:</label>
+                </td>
+                <td>
+                    <input type="text" name="state" id="state" disabled>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="">Zip Code:</label>
+                </td>
+                <td>
+                    <input type="text" name="zipcode" id="zipcode" disabled>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="">Email:</label>
+                </td>
+                <td>
+                    <input type="text" name="email" id="email" disabled>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="">Phone Number:</label>
+                </td>
+                <td>
+                    <input type="text" name="phoneNumber" id="phoneNumber" disabled>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="">Height (Ft/inches):</label>
+                </td>
+                <td>
+                    <input type="text" name="height" id="height" disabled>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="">Weight (kgs):</label>
+                </td>
+                <td>
+                    <input type="text" name="weight" id="weight" disabled>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" align="center">
+                    <input type="button" value="Delete" name="delete" id="delete" onclick="conformDialog()" >
+                    <input type="button" value="Logout" onclick="goLoginPage()" style="margin-left: 20px;">
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" align="center">
+                    <p id="demo"></p>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+     <!-- The Modal -->
+     <div id="myModal" class="modal">
+
+        <!-- Modal content -->
+        <div class="modal-content">
+                <div class="model-heading" >confirmation</div>
+                <div class="fields">
+                    <label for="">First Name:</label>
+                    <span class="value" id="modelFname"></span>
+                    
+                </div>  
+                <div class="fields">
+                    <label for="">Last Name:</label>
+                    <span class="value" id="modelLname"></span>
+                </div>
+                <div class="fields">
+                    <label for="">Middle Name:</label>
+                    <span class="value" id="modelMname"></span>
+                </div>
+                <div class="fields">
+                    <label for="" >Address:</label>
+                    <label class="value" id="modelAddress"></label>
+                </div>
+                <div class="fields">
+                    <table  style="width: 100%;">
+                        <tr>
+                            <td>
+                                <label for="">Email:</label>
+                                <span class="value" id="modelEmail" ></span>
+                            </td>
+                            <td>
+                                <label for="" >Phone Number:</label>
+                                <span class="value" id="modelPnumber"></span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="fields">
+                    <table style="width: 100%;">
+                        <tr>
+                            <td>
+                                <label for="">Height:</label>
+                                <span class="value" id="modelHeight"></span>
+                            </td>
+                            <td>
+                                <label for="">Weight:</label>
+                                <span class="value" id="modelWeight"></span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="fields" align="right">
+                    <input type="button" value="Cancel" onclick="closeModel()">
+                    <input type="button" value="ok" onclick="saveUser()" style="margin-right: 0px;">
+                </div>              
+        </div>
+    
+    </div>
+
+    <div id="dialogMsg" class="modal">
+
+        <div class="modal-content">
+            <p id="apiMessage" align="center"></p>
+            <div class="fields" align="right">
+                <input type="button" value="Cancel" id="dialogMsgClose" onclick="closeModel()">
+                <input type="button" value="Delete" id="dialogMsgCancel" onclick="deleteUserAccount()">
+            </div>
+        </div>
+    
+    </div>
+</body>
+<script>
+    const params = new URLSearchParams(document.location.search);
+    var accessToken = params.get("accessToken")
+    getUserDetails(accessToken)
+    var id = ''
+    var isDelete = false
+    function getUserDetails(accessToken) {
+        getUserDetailsInAuthorzation(accessToken, (results) => {
+            console.log(results)
+            var result = results.data
+            if(!results.error) {
+                document.getElementById("fname").value = result.firstName
+                document.getElementById("lname").value = result.lastName
+                document.getElementById("mname").value = result.middleName
+                document.getElementById("address").value = result.address
+                document.getElementById("country").value = result.country
+                document.getElementById("state").value = result.state
+                document.getElementById("zipcode").value = result.zipcode
+                document.getElementById("email").value = result.email
+                document.getElementById("phoneNumber").value = result.phoneNumber
+                document.getElementById("height").value = result.height
+                document.getElementById("weight").value = result.weight
+                id = result.id
+            } else {
+                document.getElementById("apiMessage").innerHTML = `${results.message}`
+                document.getElementById("dialogMsgCancel").style.display = "none"
+                showMsgDialog()
+            }
+        })
+
+    }
+
+    function deleteUserAccount() {
+        deleteAccount(id, (result) => {
+            console.log(result)
+            document.getElementById("apiMessage").innerHTML = `${result.message}`
+            document.getElementById("dialogMsgCancel").style.display = "none"
+            isDelete = true
+            showMsgDialog()
+        })
+    }
+    var comData = {}
+    var modal = document.getElementById("myModal");
+    var msgModal = document.getElementById("dialogMsg");
+
+    function conformDialog () {
+        console.log("lmkjnhbgvf")
+        document.getElementById("apiMessage").innerHTML = `This user details want be delete?`
+        showMsgDialog()
+    }
+
+    function showDialog(data) {
+        modal.style.display = "block";
+        document.getElementById("modelFname").innerHTML = data.fname
+        document.getElementById("modelLname").innerHTML = data.lname
+        document.getElementById("modelMname").innerHTML = data.mname
+        document.getElementById("modelAddress").innerHTML = `${data.address}<br/>${data.country}<br/>${data.state}<br/>${data.zipcode}`
+        document.getElementById("modelEmail").innerHTML = data.phoneNumber
+        document.getElementById("modelPnumber").innerHTML = data.phoneNumber
+        document.getElementById("modelHeight").innerHTML = data.height
+        document.getElementById("modelWeight").innerHTML = data.weight
+        comData = data
+    }
+
+    function showMsgDialog() {
+        msgModal.style.display = "block";
+    }
+
+    function closeModel() {
+        modal.style.display = "none";
+        msgModal.style.display = "none";
+        document.getElementById("dialogMsgCancel").style.display = "block"
+        if(isDelete) {
+            goLoginPage()
+        }
+    }
+
+
+    
+    
+    function goLoginPage(){
+        window.location.href = "./loginPage.html";
+    }
+    
+    </script>
+    
+</html>
